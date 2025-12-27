@@ -4,7 +4,10 @@
 
 export class AuthService {
   private static readonly AUTH_KEY = 'productivity-app-auth';
+  private static readonly LOCKOUT_KEY = 'productivity-app-lockout';
   private static readonly SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+  private static readonly MAX_ATTEMPTS = 5;
+  private static readonly LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
 
   // User credentials (hashed)
   private static readonly USERNAME = 'drewdrew';
@@ -19,7 +22,69 @@ export class AuthService {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
+  static isLockedOut(): { locked: boolean; remainingTime?: number } {
+    try {
+      const lockoutStr = localStorage.getItem(this.LOCKOUT_KEY);
+      if (!lockoutStr) return { locked: false };
+
+      const lockout = JSON.parse(lockoutStr);
+      const now = Date.now();
+      const timeSinceLockout = now - lockout.timestamp;
+
+      if (timeSinceLockout < this.LOCKOUT_DURATION) {
+        const remainingTime = this.LOCKOUT_DURATION - timeSinceLockout;
+        return { locked: true, remainingTime };
+      }
+
+      // Lockout expired, clear it
+      localStorage.removeItem(this.LOCKOUT_KEY);
+      return { locked: false };
+    } catch {
+      return { locked: false };
+    }
+  }
+
+  static recordFailedAttempt(): void {
+    try {
+      const lockoutStr = localStorage.getItem(this.LOCKOUT_KEY);
+      let lockout = lockoutStr ? JSON.parse(lockoutStr) : { attempts: 0, timestamp: Date.now() };
+
+      lockout.attempts += 1;
+
+      if (lockout.attempts >= this.MAX_ATTEMPTS) {
+        lockout.timestamp = Date.now();
+        lockout.locked = true;
+      }
+
+      localStorage.setItem(this.LOCKOUT_KEY, JSON.stringify(lockout));
+    } catch {
+      // Fail silently
+    }
+  }
+
+  static resetFailedAttempts(): void {
+    localStorage.removeItem(this.LOCKOUT_KEY);
+  }
+
+  static getRemainingAttempts(): number {
+    try {
+      const lockoutStr = localStorage.getItem(this.LOCKOUT_KEY);
+      if (!lockoutStr) return this.MAX_ATTEMPTS;
+
+      const lockout = JSON.parse(lockoutStr);
+      return Math.max(0, this.MAX_ATTEMPTS - (lockout.attempts || 0));
+    } catch {
+      return this.MAX_ATTEMPTS;
+    }
+  }
+
   static async login(username: string, password: string, pin: string): Promise<boolean> {
+    // Check if locked out
+    const lockoutStatus = this.isLockedOut();
+    if (lockoutStatus.locked) {
+      return false;
+    }
+
     const passwordHash = await this.hashPassword(password);
     const pinHash = await this.hashPassword(pin);
     
@@ -30,8 +95,12 @@ export class AuthService {
         username: username
       };
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(session));
+      this.resetFailedAttempts(); // Clear failed attempts on successful login
       return true;
     }
+    
+    // Record failed attempt
+    this.recordFailedAttempt();
     return false;
   }
 

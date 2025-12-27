@@ -134,6 +134,17 @@ export class LoginComponent {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      // Check if locked out
+      const lockoutStatus = AuthService.isLockedOut();
+      if (lockoutStatus.locked && lockoutStatus.remainingTime) {
+        const minutes = Math.ceil(lockoutStatus.remainingTime / 60000);
+        errorMessage.querySelector('span')!.textContent = `Too many failed attempts. Please try again in ${minutes} minute${minutes > 1 ? 's' : ''}.`;
+        errorMessage.style.display = 'flex';
+        form.classList.add('shake');
+        setTimeout(() => form.classList.remove('shake'), 500);
+        return;
+      }
+      
       console.log('Login form submitted');
       
       const username = usernameInput.value.trim();
@@ -161,6 +172,16 @@ export class LoginComponent {
             this.onLoginSuccess();
           }, 500);
         } else {
+          // Check if now locked out
+          const newLockoutStatus = AuthService.isLockedOut();
+          if (newLockoutStatus.locked && newLockoutStatus.remainingTime) {
+            const minutes = Math.ceil(newLockoutStatus.remainingTime / 60000);
+            errorMessage.querySelector('span')!.textContent = `Too many failed attempts. Account locked for ${minutes} minute${minutes > 1 ? 's' : ''}.`;
+          } else {
+            const remainingAttempts = AuthService.getRemainingAttempts();
+            errorMessage.querySelector('span')!.textContent = `Invalid credentials. ${remainingAttempts} attempt${remainingAttempts !== 1 ? 's' : ''} remaining.`;
+          }
+          
           errorMessage.style.display = 'flex';
           passwordInput.value = '';
           pinInput.value = '';
