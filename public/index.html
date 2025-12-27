@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorized To-Do List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="app">
+    <header>
+      <h1>📋 Categorized To-Do List</h1>
+      <nav>
+        <button id="nav-dashboard" class="nav-btn active" aria-label="View Dashboard">Dashboard</button>
+        <button id="nav-tasks" class="nav-btn" aria-label="View Tasks">Tasks</button>
+        <button id="nav-calendar" class="nav-btn" aria-label="View Calendar">Calendar</button>
+      </nav>
+    </header>
+    
+    <main id="main-content">
+      <!-- Dashboard View -->
+      <section id="dashboard-view" class="view active">
+        <div class="dashboard-header">
+          <h2>Analytics Dashboard</h2>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-range="week">This Week</button>
+            <button class="time-btn" data-range="month">This Month</button>
+            <button class="time-btn" data-range="all">All Time</button>
+          </div>
+        </div>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <span class="stat-value" id="total-items">0</span>
+            <span class="stat-label">Total Items</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="completed-tasks">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="completion-rate">0%</span>
+            <span class="stat-label">Completion Rate</span>
+          </div>
+        </div>
+
+        <div class="dashboard-charts">
+          <div class="chart-container">
+            <h3>Category Distribution</h3>
+            <canvas id="distribution-chart" aria-label="Category distribution pie chart"></canvas>
+          </div>
+          <div class="chart-container">
+            <h3>Completion by Category</h3>
+            <canvas id="completion-chart" aria-label="Completion rates bar chart"></canvas>
+          </div>
+        </div>
+
+        <div class="recommendations-section">
+          <h3>Recommendations</h3>
+          <ul id="recommendations-list" class="recommendations-list"></ul>
+        </div>
+
+        <div class="neglected-section" id="neglected-section" style="display: none;">
+          <h3>⚠️ Areas Needing Attention</h3>
+          <div id="neglected-categories" class="neglected-categories"></div>
+        </div>
+      </section>
+
+      <!-- Tasks View -->
+      <section id="tasks-view" class="view">
+        <!-- Input Form -->
+        <div class="input-section">
+          <form id="item-form" class="item-form">
+            <div class="input-main">
+              <input 
+                type="text" 
+                id="description-input" 
+                placeholder="What do you need to do or remember?" 
+                aria-label="Task or note description"
+                required
+              >
+              <button type="submit" class="add-btn" aria-label="Add item">Add</button>
+            </div>
+            
+            <div class="input-suggestion" id="category-suggestion" style="display: none;">
+              Suggested: <span id="suggested-category"></span>
+            </div>
+
+            <details class="optional-fields">
+              <summary>More options</summary>
+              <div class="optional-fields-content">
+                <div class="field-group">
+                  <label for="category-select">Category</label>
+                  <select id="category-select" aria-label="Select category">
+                    <option value="">Auto-detect</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label for="due-date-input">Due Date</label>
+                  <input type="date" id="due-date-input" aria-label="Due date">
+                </div>
+                <div class="field-group">
+                  <label for="location-input">Location</label>
+                  <input type="text" id="location-input" placeholder="Optional location" aria-label="Location">
+                </div>
+                <div class="field-group">
+                  <label for="tags-input">Tags (comma-separated)</label>
+                  <input type="text" id="tags-input" placeholder="tag1, tag2" aria-label="Tags">
+                </div>
+              </div>
+            </details>
+          </form>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+          <div class="filter-group">
+            <input 
+              type="search" 
+              id="search-input" 
+              placeholder="Search items..." 
+              aria-label="Search items"
+            >
+          </div>
+          <div class="filter-group">
+            <select id="filter-category" aria-label="Filter by category">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select id="filter-status" aria-label="Filter by status">
+              <option value="">All Status</option>
+              <option value="incomplete">Incomplete</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select id="sort-option" aria-label="Sort by">
+              <option value="createdAt">Newest First</option>
+              <option value="dueDate">Due Date</option>
+              <option value="description">Alphabetical</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Items List -->
+        <div id="items-list" class="items-list" role="list" aria-label="Items list">
+          <div class="empty-state" id="empty-state">
+            <p>No items yet. Add your first task or note above!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calendar View -->
+      <section id="calendar-view" class="view">
+        <div class="calendar-view-header">
+          <h2>📅 Calendar</h2>
+          <p class="calendar-subtitle">View your tasks across months</p>
+        </div>
+        <div id="calendar-container" class="calendar-container"></div>
+      </section>
+    </main>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal" role="dialog" aria-labelledby="edit-modal-title" aria-hidden="true">
+      <div class="modal-content">
+        <h2 id="edit-modal-title">Edit Item</h2>
+        <form id="edit-form">
+          <input type="hidden" id="edit-item-id">
+          <div class="field-group">
+            <label for="edit-description">Description</label>
+            <input type="text" id="edit-description" required>
+          </div>
+          <div class="field-group">
+            <label for="edit-category">Category</label>
+            <select id="edit-category"></select>
+          </div>
+          <div class="field-group">
+            <label for="edit-due-date">Due Date</label>
+            <input type="date" id="edit-due-date">
+          </div>
+          <div class="field-group">
+            <label for="edit-location">Location</label>
+            <input type="text" id="edit-location">
+          </div>
+          <div class="field-group">
+            <label for="edit-tags">Tags (comma-separated)</label>
+            <input type="text" id="edit-tags">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancel-edit">Cancel</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="../src/main.ts"></script>
+</body>
+</html>
