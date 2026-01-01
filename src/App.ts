@@ -338,16 +338,45 @@ export class App {
   }
 
   private async refreshAll(): Promise<void> {
-    await this.taskListComponent.refresh();
-    await this.calendarComponent.refresh();
-    await this.dailyFocusComponent.refresh();
-    await this.habitTrackerComponent.refresh();
-    await this.quickWinsComponent.refresh();
-    await this.weeklyReviewComponent.refresh();
-    await this.habitHeatmapComponent.refresh();
-    await this.identityGoalsComponent.refresh();
-    await this.progressAnalyticsComponent.refresh();
-    await this.updateProgress();
+    try {
+      await this.taskListComponent?.refresh();
+    } catch (e) { console.warn('taskListComponent refresh failed:', e); }
+    
+    try {
+      await this.calendarComponent?.refresh();
+    } catch (e) { console.warn('calendarComponent refresh failed:', e); }
+    
+    try {
+      await this.dailyFocusComponent?.refresh();
+    } catch (e) { console.warn('dailyFocusComponent refresh failed:', e); }
+    
+    try {
+      await this.habitTrackerComponent?.refresh();
+    } catch (e) { console.warn('habitTrackerComponent refresh failed:', e); }
+    
+    try {
+      await this.quickWinsComponent?.refresh();
+    } catch (e) { console.warn('quickWinsComponent refresh failed:', e); }
+    
+    try {
+      await this.weeklyReviewComponent?.refresh();
+    } catch (e) { console.warn('weeklyReviewComponent refresh failed:', e); }
+    
+    try {
+      await this.habitHeatmapComponent?.refresh();
+    } catch (e) { console.warn('habitHeatmapComponent refresh failed:', e); }
+    
+    try {
+      await this.identityGoalsComponent?.refresh();
+    } catch (e) { console.warn('identityGoalsComponent refresh failed:', e); }
+    
+    try {
+      await this.progressAnalyticsComponent?.refresh();
+    } catch (e) { console.warn('progressAnalyticsComponent refresh failed:', e); }
+    
+    try {
+      await this.updateProgress();
+    } catch (e) { console.warn('updateProgress failed:', e); }
   }
 
   private async handleCreateItem(input: CreateItemInput): Promise<void> {
