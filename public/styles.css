@@ -5462,3 +5462,65 @@ select:focus-visible {
   padding: 0;
   margin: 0;
 }
+
+
+/* Quick Category Buttons with Labels */
+.quick-categories {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.quick-cat-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  padding-top: 8px;
+}
+
+.quick-cat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.quick-cat-btn:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.quick-cat-btn:active {
+  transform: translateY(0);
+}
+
+.quick-cat-btn.selected {
+  border-color: #3b82f6;
+  background: #dbeafe;
+}
+
+.quick-cat-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.quick-cat-text {
+  font-size: 0.65rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.quick-cat-btn:hover .quick-cat-text {
+  color: #3b82f6;
+}
