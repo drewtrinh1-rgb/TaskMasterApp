@@ -1,6 +1,13 @@
 /**
  * AuthService - Simple password-based authentication with username and PIN
+ * Supports multiple user profiles
  */
+
+interface UserCredentials {
+  username: string;
+  passwordHash: string;
+  pinHash: string;
+}
 
 export class AuthService {
   private static readonly AUTH_KEY = 'productivity-app-auth';
@@ -9,10 +16,19 @@ export class AuthService {
   private static readonly MAX_ATTEMPTS = 5;
   private static readonly LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
 
-  // User credentials (hashed)
-  private static readonly USERNAME = 'drewdrew';
-  private static readonly PASSWORD_HASH = 'cb889b53cbfc29a1a9b558039cbc2b84dd60fb32491ea0050123907376b4f73f'; // Canley99!!
-  private static readonly PIN_HASH = 'a268777d1ba1e6b8abcb4ca845ab7de17421dcd6bbad6e54877a82dd44234870'; // 13031996
+  // User credentials (hashed) - Multiple users supported
+  private static readonly USERS: UserCredentials[] = [
+    {
+      username: 'drewdrew',
+      passwordHash: 'cb889b53cbfc29a1a9b558039cbc2b84dd60fb32491ea0050123907376b4f73f', // Canley99!!
+      pinHash: 'a268777d1ba1e6b8abcb4ca845ab7de17421dcd6bbad6e54877a82dd44234870' // 13031996
+    },
+    {
+      username: 'megmeg',
+      passwordHash: 'c2dd17d4368d7b8ef7dcb2b9e70fa52651955c79677a3423d5b1a9c152ba2ae7', // Mochimybubba123
+      pinHash: '158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab' // 2026
+    }
+  ];
 
   static async hashPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();
@@ -87,12 +103,20 @@ export class AuthService {
 
     const passwordHash = await this.hashPassword(password);
     const pinHash = await this.hashPassword(pin);
+    const usernameLower = username.toLowerCase();
     
-    if (username === this.USERNAME && passwordHash === this.PASSWORD_HASH && pinHash === this.PIN_HASH) {
+    // Check against all registered users
+    const matchedUser = this.USERS.find(user => 
+      user.username.toLowerCase() === usernameLower && 
+      user.passwordHash === passwordHash && 
+      user.pinHash === pinHash
+    );
+    
+    if (matchedUser) {
       const session = {
         authenticated: true,
         timestamp: Date.now(),
-        username: username
+        username: matchedUser.username
       };
       localStorage.setItem(this.AUTH_KEY, JSON.stringify(session));
       this.resetFailedAttempts(); // Clear failed attempts on successful login
