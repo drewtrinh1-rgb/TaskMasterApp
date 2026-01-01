@@ -159,35 +159,6 @@
           </form>
         </div>
 
-        <!-- Daily Focus Section -->
-        <div id="daily-focus-container" class="daily-focus-section"></div>
-
-        <!-- Habit Tracker & Quick Wins Row -->
-        <div class="habits-quick-row">
-          <div id="habit-tracker-container" class="habit-tracker-section"></div>
-          <div id="quick-wins-container" class="quick-wins-section"></div>
-        </div>
-        
-        <!-- Habit Templates Section -->
-        <div id="habit-templates-container" class="habit-templates-section"></div>
-
-        <!-- Daily Progress Ring -->
-        <div class="progress-section">
-          <div class="progress-ring-container">
-            <svg class="progress-ring" width="80" height="80">
-              <circle class="progress-ring-bg" cx="40" cy="40" r="35" />
-              <circle class="progress-ring-fill" id="progress-ring-fill" cx="40" cy="40" r="35" />
-            </svg>
-            <div class="progress-text">
-              <span id="progress-percent">0%</span>
-            </div>
-          </div>
-          <div class="progress-info">
-            <span class="progress-label">Today's Progress</span>
-            <span class="progress-detail" id="progress-detail">0 of 0 tasks</span>
-          </div>
-        </div>
-
         <!-- Filters -->
         <div class="filters-section">
           <div class="filter-group">
@@ -219,7 +190,7 @@
           </div>
         </div>
 
-        <!-- Items List -->
+        <!-- Items List - Moved up -->
         <div class="items-container">
           <div class="tasks-column">
             <h3 class="column-header">📋 Tasks</h3>
@@ -258,6 +229,74 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Daily Progress Ring -->
+        <div class="progress-section">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" width="80" height="80">
+              <circle class="progress-ring-bg" cx="40" cy="40" r="35" />
+              <circle class="progress-ring-fill" id="progress-ring-fill" cx="40" cy="40" r="35" />
+            </svg>
+            <div class="progress-text">
+              <span id="progress-percent">0%</span>
+            </div>
+          </div>
+          <div class="progress-info">
+            <span class="progress-label">Today's Progress</span>
+            <span class="progress-detail" id="progress-detail">0 of 0 tasks</span>
+          </div>
+        </div>
+
+        <!-- Collapsible Sections -->
+        <div class="collapsible-sections">
+          <!-- Daily Focus Section - Collapsible -->
+          <details class="collapsible-panel daily-focus-panel" open>
+            <summary class="collapsible-header">
+              <span class="collapsible-icon">🎯</span>
+              <span class="collapsible-title">Today's Focus</span>
+              <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div id="daily-focus-container" class="daily-focus-section collapsible-content"></div>
+          </details>
+
+          <!-- Habit Tracker - Collapsible -->
+          <details class="collapsible-panel habit-tracker-panel">
+            <summary class="collapsible-header">
+              <span class="collapsible-icon">🔥</span>
+              <span class="collapsible-title">Habit Tracker</span>
+              <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div id="habit-tracker-container" class="habit-tracker-section collapsible-content"></div>
+          </details>
+
+          <!-- Quick Wins - Collapsible -->
+          <details class="collapsible-panel quick-wins-panel">
+            <summary class="collapsible-header">
+              <span class="collapsible-icon">⚡</span>
+              <span class="collapsible-title">Quick Wins</span>
+              <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div id="quick-wins-container" class="quick-wins-section collapsible-content"></div>
+          </details>
+
+          <!-- Habit Templates - Collapsible -->
+          <details class="collapsible-panel habit-templates-panel">
+            <summary class="collapsible-header">
+              <span class="collapsible-icon">📋</span>
+              <span class="collapsible-title">Habit Templates</span>
+              <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div id="habit-templates-container" class="habit-templates-section collapsible-content"></div>
+          </details>
         </div>
       </section>
 

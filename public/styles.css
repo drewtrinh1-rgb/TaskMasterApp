@@ -5339,3 +5339,126 @@ select:focus-visible {
     font-size: 16px;
   }
 }
+
+
+/* Collapsible Sections */
+.collapsible-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.collapsible-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.collapsible-header:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.collapsible-panel[open] .collapsible-header {
+  border-bottom-color: #e5e7eb;
+}
+
+.collapsible-icon {
+  font-size: 1.25rem;
+}
+
+.collapsible-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.chevron-icon {
+  transition: transform 0.3s ease;
+  color: #6b7280;
+}
+
+.collapsible-panel[open] .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.collapsible-content {
+  padding: 16px 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Panel-specific colors */
+.daily-focus-panel .collapsible-header {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.daily-focus-panel .collapsible-header:hover {
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+}
+
+.habit-tracker-panel .collapsible-header {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+}
+
+.habit-tracker-panel .collapsible-header:hover {
+  background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+}
+
+.quick-wins-panel .collapsible-header {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.quick-wins-panel .collapsible-header:hover {
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.habit-templates-panel .collapsible-header {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.habit-templates-panel .collapsible-header:hover {
+  background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+}
+
+/* Remove old habits-quick-row styles conflict */
+.habits-quick-row {
+  display: none;
+}
+
+/* Adjust collapsible content sections to remove duplicate styling */
+.collapsible-content .daily-focus-section,
+.collapsible-content .habit-tracker-section,
+.collapsible-content .quick-wins-section,
+.collapsible-content .habit-templates-section {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
