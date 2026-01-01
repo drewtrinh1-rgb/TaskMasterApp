@@ -43,6 +43,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Already authenticated, loading app...');
     // Already authenticated, extend session and load app
     AuthService.extendSession();
+    
+    // Check if the app HTML structure exists
+    const navHub = document.getElementById('nav-hub');
+    const calendarContainer = document.getElementById('calendar-container');
+    
+    if (!navHub || !calendarContainer) {
+      console.error('App HTML structure not found, this may be a caching issue');
+      // Force a hard reload to get fresh HTML
+      window.location.href = window.location.pathname + '?refresh=' + Date.now();
+      return;
+    }
+    
     initializeApp();
   }
 });

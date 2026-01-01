@@ -224,6 +224,17 @@ export class App {
     this.calendarView = document.getElementById('calendar-view') as HTMLElement;
     this.settingsView = document.getElementById('settings-view') as HTMLElement;
 
+    // Check if all elements exist
+    if (!this.hubBtn || !this.tasksBtn || !this.projectsBtn || !this.calendarBtn || !this.settingsBtn) {
+      console.error('Navigation buttons not found in DOM');
+      return;
+    }
+    
+    if (!this.hubView || !this.tasksView || !this.projectsView || !this.calendarView || !this.settingsView) {
+      console.error('View containers not found in DOM');
+      return;
+    }
+
     this.hubBtn.addEventListener('click', () => this.showView('hub'));
     this.tasksBtn.addEventListener('click', () => this.showView('tasks'));
     this.projectsBtn.addEventListener('click', () => this.showView('projects'));
