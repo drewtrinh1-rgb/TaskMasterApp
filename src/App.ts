@@ -23,6 +23,7 @@ import { Toast } from './components/Toast';
 import { Confetti } from './utils/confetti';
 import { FloatingDotsBackground } from './utils/floatingDots';
 import { seedProjects } from './utils/seedProjects';
+import { AuthService } from './services/AuthService';
 
 export class App {
   private storageManager: StorageManager;
@@ -89,6 +90,7 @@ export class App {
       this.initializeComponents();
       this.initializeNavigation();
       this.initializeProgress();
+      this.initializeUserDisplay();
       
       // Check for missed habits (Phase 2)
       await this.itemManager.checkMissedHabits();
@@ -246,6 +248,16 @@ export class App {
     this.progressRingFill = document.getElementById('progress-ring-fill') as unknown as SVGCircleElement;
     this.progressPercent = document.getElementById('progress-percent') as HTMLElement;
     this.progressDetail = document.getElementById('progress-detail') as HTMLElement;
+  }
+
+  private initializeUserDisplay(): void {
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) {
+      const username = AuthService.getUsername();
+      // Display friendly name (capitalize first letter)
+      const displayName = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+      usernameDisplay.textContent = displayName;
+    }
   }
 
   private async updateProgress(): Promise<void> {
