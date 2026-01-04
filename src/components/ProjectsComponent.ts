@@ -32,7 +32,7 @@ export class ProjectsComponent {
         <div class="projects-header">
           <div class="projects-title">
             <h2>📋 Long-Term Projects & Applications</h2>
-            <p>Track fellowships, scholarships, and speaking opportunities</p>
+            <p>Track fellowships, scholarships, speaking opportunities, and events</p>
           </div>
           <div class="projects-header-actions">
             <button class="btn-secondary" id="toggle-archived-btn">
@@ -104,6 +104,7 @@ export class ProjectsComponent {
                     <option value="scholarship">Scholarship</option>
                     <option value="speaking">Speaking</option>
                     <option value="leadership">Leadership</option>
+                    <option value="event">Event/Conference</option>
                     <option value="other">Other</option>
                   </select>
                 </div>
@@ -217,6 +218,7 @@ export class ProjectsComponent {
                     <option value="scholarship">Scholarship</option>
                     <option value="speaking">Speaking</option>
                     <option value="leadership">Leadership</option>
+                    <option value="event">Event/Conference</option>
                     <option value="other">Other</option>
                   </select>
                 </div>
@@ -363,6 +365,7 @@ export class ProjectsComponent {
       scholarship: '📚',
       speaking: '🎤',
       leadership: '👥',
+      event: '📅',
       other: '📋'
     };
 
@@ -519,7 +522,7 @@ export class ProjectsComponent {
           <path d="M40 50h40M40 60h30M40 70h35" stroke="#ddd" stroke-width="4" stroke-linecap="round"/>
         </svg>
         <h3>${this.showArchived ? 'No Archived Projects' : 'No Projects Yet'}</h3>
-        <p>${this.showArchived ? 'Archived projects will appear here' : 'Start tracking your fellowships, scholarships, and applications'}</p>
+        <p>${this.showArchived ? 'Archived projects will appear here' : 'Start tracking your fellowships, scholarships, speaking opportunities, and events'}</p>
       </div>
     `;
   }

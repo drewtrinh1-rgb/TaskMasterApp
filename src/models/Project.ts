@@ -24,7 +24,7 @@ export interface Project {
   title: string;
   description: string;
   status: ProjectStatus;
-  category: 'fellowship' | 'scholarship' | 'speaking' | 'leadership' | 'other';
+  category: 'fellowship' | 'scholarship' | 'speaking' | 'leadership' | 'event' | 'other';
   
   // Timeline
   applicationOpenDate?: Date;
