@@ -53,6 +53,14 @@ export class ProjectManager {
     return [...this.projects];
   }
 
+  getActiveProjects(): Project[] {
+    return this.projects.filter(p => !p.archived);
+  }
+
+  getArchivedProjects(): Project[] {
+    return this.projects.filter(p => p.archived);
+  }
+
   getProject(id: string): Project | undefined {
     return this.projects.find(p => p.id === id);
   }
@@ -192,6 +200,26 @@ export class ProjectManager {
     if (index < 0 || index >= project.questions.length) return false;
 
     project.questions.splice(index, 1);
+    project.updatedAt = new Date();
+    this.saveProjects();
+    return true;
+  }
+
+  archiveProject(id: string): boolean {
+    const project = this.getProject(id);
+    if (!project) return false;
+
+    project.archived = true;
+    project.updatedAt = new Date();
+    this.saveProjects();
+    return true;
+  }
+
+  unarchiveProject(id: string): boolean {
+    const project = this.getProject(id);
+    if (!project) return false;
+
+    project.archived = false;
     project.updatedAt = new Date();
     this.saveProjects();
     return true;

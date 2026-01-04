@@ -46,6 +46,7 @@ export interface Project {
   updatedAt: Date;
   url?: string;
   priority: 'high' | 'medium' | 'low';
+  archived?: boolean;
 }
 
 export interface CreateProjectInput {

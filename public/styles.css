@@ -3987,6 +3987,12 @@ select:focus-visible {
   margin-bottom: 32px;
 }
 
+.projects-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .projects-title h2 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -4268,6 +4274,28 @@ select:focus-visible {
 .btn-delete:hover {
   background: #ffebee;
   border-color: var(--color-important-priority);
+}
+
+.btn-archive {
+  background: var(--bg-color);
+  color: #FFA500;
+  border: 2px solid var(--border-color);
+}
+
+.btn-archive:hover {
+  background: #fff3e0;
+  border-color: #FFA500;
+}
+
+.btn-unarchive {
+  background: var(--bg-color);
+  color: #32CD32;
+  border: 2px solid var(--border-color);
+}
+
+.btn-unarchive:hover {
+  background: #e8f5e9;
+  border-color: #32CD32;
 }
 
 /* Empty State */

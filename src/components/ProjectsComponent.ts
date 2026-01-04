@@ -15,6 +15,7 @@ export class ProjectsComponent {
   private container: HTMLElement;
   private projectManager: ProjectManager;
   private selectedProject: Project | null = null;
+  private showArchived: boolean = false;
 
   constructor(options: ProjectsComponentOptions) {
     this.container = document.getElementById('projects-container') as HTMLElement;
@@ -22,7 +23,9 @@ export class ProjectsComponent {
   }
 
   render(): void {
-    const projects = this.projectManager.getAllProjects();
+    const projects = this.showArchived 
+      ? this.projectManager.getArchivedProjects() 
+      : this.projectManager.getActiveProjects();
     
     this.container.innerHTML = `
       <div class="projects-view">
@@ -31,16 +34,21 @@ export class ProjectsComponent {
             <h2>📋 Long-Term Projects & Applications</h2>
             <p>Track fellowships, scholarships, and speaking opportunities</p>
           </div>
-          <button class="btn-primary" id="add-project-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Add Project
-          </button>
+          <div class="projects-header-actions">
+            <button class="btn-secondary" id="toggle-archived-btn">
+              ${this.showArchived ? '📂 View Active' : '📦 View Archived'}
+            </button>
+            <button class="btn-primary" id="add-project-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Project
+            </button>
+          </div>
         </div>
 
-        ${this.renderTimeline(projects)}
+        ${!this.showArchived ? this.renderTimeline(projects) : ''}
         
         <div class="projects-grid">
           ${projects.length > 0 ? projects.map(p => this.renderProjectCard(p)).join('') : this.renderEmptyState()}
@@ -403,6 +411,10 @@ export class ProjectsComponent {
         <div class="project-actions">
           <button class="btn-view" data-id="${project.id}">View Details</button>
           <button class="btn-edit" data-id="${project.id}">Edit</button>
+          ${project.archived 
+            ? `<button class="btn-unarchive" data-id="${project.id}">Unarchive</button>`
+            : `<button class="btn-archive" data-id="${project.id}">Archive</button>`
+          }
           <button class="btn-delete" data-id="${project.id}">Delete</button>
         </div>
       </div>
@@ -506,13 +518,20 @@ export class ProjectsComponent {
           <circle cx="60" cy="60" r="50" fill="#f0f0f0"/>
           <path d="M40 50h40M40 60h30M40 70h35" stroke="#ddd" stroke-width="4" stroke-linecap="round"/>
         </svg>
-        <h3>No Projects Yet</h3>
-        <p>Start tracking your fellowships, scholarships, and applications</p>
+        <h3>${this.showArchived ? 'No Archived Projects' : 'No Projects Yet'}</h3>
+        <p>${this.showArchived ? 'Archived projects will appear here' : 'Start tracking your fellowships, scholarships, and applications'}</p>
       </div>
     `;
   }
 
   private attachEventListeners(): void {
+    // Toggle archived button
+    const toggleArchivedBtn = document.getElementById('toggle-archived-btn');
+    toggleArchivedBtn?.addEventListener('click', () => {
+      this.showArchived = !this.showArchived;
+      this.render();
+    });
+
     // Add project button
     const addBtn = document.getElementById('add-project-btn');
     addBtn?.addEventListener('click', () => this.showAddProjectModal());
@@ -574,6 +593,30 @@ export class ProjectsComponent {
         const id = (e.target as HTMLElement).getAttribute('data-id');
         if (id && confirm('Delete this project?')) {
           this.projectManager.deleteProject(id);
+          this.render();
+        }
+      });
+    });
+
+    // Archive buttons
+    const archiveBtns = this.container.querySelectorAll('.btn-archive');
+    archiveBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = (e.target as HTMLElement).getAttribute('data-id');
+        if (id) {
+          this.projectManager.archiveProject(id);
+          this.render();
+        }
+      });
+    });
+
+    // Unarchive buttons
+    const unarchiveBtns = this.container.querySelectorAll('.btn-unarchive');
+    unarchiveBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = (e.target as HTMLElement).getAttribute('data-id');
+        if (id) {
+          this.projectManager.unarchiveProject(id);
           this.render();
         }
       });
